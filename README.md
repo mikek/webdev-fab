@@ -104,3 +104,9 @@ Example usage
     fab provision
     fab local_to_remote
     git commit -a -m "Some changes" && git push && fab deploy
+
+Links
+-----
+
+This project is used in a custom [django basic project template](https://github.com/mikek/django-basic-project-template)
+and Chef/knife-solo based [django-kitchen](https://github.com/mikek/django-kitchen).
