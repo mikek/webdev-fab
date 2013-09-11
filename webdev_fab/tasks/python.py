@@ -9,9 +9,14 @@ from fabric.state import env
 def setup_virtualenv(path='~/.env'):
     """Create new virtualenv, activate it in ~/.profile"""
     if not exists(path):
+        v = '1.10.1'
+        tarball = 'virtualenv-' + v + '.tar.gz'
         run('curl --insecure '
-            '-O https://raw.github.com/pypa/virtualenv/master/virtualenv.py')
-        run('python virtualenv.py --distribute {}'.format(path))
+            '-O https://pypi.python.org/packages/source/v/virtualenv/' +
+            tarball)
+        run('tar xvfz ' + tarball)
+        with cd('virtualenv-' + v):
+            run('python virtualenv.py {}'.format(path))
     append('.profile', 'export LANG=en_US.UTF8', partial=True)
     append('.profile', 'source {}/bin/activate'.format(path), partial=True)
 
