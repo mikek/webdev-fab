@@ -18,7 +18,7 @@ def setup_virtualenv(path='~/.env'):
         with cd('virtualenv-' + v):
             run('python virtualenv.py {}'.format(path))
     append('.profile', 'export LANG=en_US.UTF8', partial=True)
-    append('.profile', 'source {}/bin/activate'.format(path), partial=True)
+    append('.profile', '. {}/bin/activate'.format(path), partial=True)
 
 
 @task
