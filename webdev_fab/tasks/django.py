@@ -159,15 +159,16 @@ def deploy(syncdb=True, requirements=True, code=True, essential=False,
             if not exists('__init__.py'):
                 run('ln -s {}.py __init__.py'.format(env.type))
         run('/bin/mkdir -p {}/media/{{static,uploads}}'.format(env.project))
-        run('/bin/mkdir -p tmp')
-        run('/bin/chmod 750 tmp')
-        with settings(hide('stdout', 'running')):
-            projdir = run('pwd', )
-        if (permissions and
-            not run('[ $(stat -c %G tmp) == {} ]'.format(
-                    env.webserver_group), warn_only=True).succeeded):
-            with settings(user=env.poweruser), cd(projdir):
-                sudo('/bin/chgrp {} tmp'.format(env.webserver_group))
+        for d in ('tmp', 'log'):
+            run('/bin/mkdir -p ' + d)
+            run('/bin/chmod 750 ' + d)
+            with settings(hide('stdout', 'running')):
+                projdir = run('pwd', )
+            if (permissions and
+                not run('[ $(stat -c %G {0}) == {1} ]'.format(
+                        d, env.webserver_group), warn_only=True).succeeded):
+                with settings(user=env.poweruser), cd(projdir):
+                    sudo('/bin/chgrp {0} {1}'.format(env.webserver_group, d))
 
     if requirements:
         execute(install_reqs, upgrade=upgrade)
