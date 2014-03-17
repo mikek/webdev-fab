@@ -9,7 +9,7 @@ from fabric.state import env
 def setup_virtualenv(path='~/.env'):
     """Create new virtualenv, activate it in ~/.profile"""
     if not exists(path):
-        v = '1.10.1'
+        v = '1.11.4'
         tarball = 'virtualenv-' + v + '.tar.gz'
         run('curl --insecure '
             '-O https://pypi.python.org/packages/source/v/virtualenv/' +
