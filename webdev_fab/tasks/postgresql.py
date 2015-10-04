@@ -72,7 +72,8 @@ def download_db(restore=False, cleanup=False, recreate=True):
     if not restore:
         return
     if recreate:
-        local('dropdb -U {0} {1}'.format(env.dbuser, env.db))
+        with settings(warn_only=True):
+            local('dropdb -U {0} {1}'.format(env.dbuser, env.db))
         local('createdb --echo --encoding=UTF8 '
               '-U postgres --owner={0} {1}'.format(env.dbuser, env.db))
     local('pg_restore -U postgres -d {1} {2}'.format(
