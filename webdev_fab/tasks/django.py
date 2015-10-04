@@ -24,12 +24,12 @@ def upload_uploads(cleanup=True):
 
     Remove tarball on a remote host if 'cleanup' is True.
     """
-    local('/bin/tar -C {}/media -c uploads > uploads.tar'.format(env.project))
+    local('tar -C {}/media -c uploads > uploads.tar'.format(env.project))
     tarball = put('uploads.tar')[0]
     local('/bin/rm uploads.tar')
     with cd('project/{}/media'.format(env.project)):
         run('/bin/rm -rf uploads')
-        run('/bin/tar -xf {}'.format(tarball))
+        run('tar -xf {}'.format(tarball))
         if cleanup:
             run('/bin/rm {}'.format(tarball))
 
@@ -42,14 +42,14 @@ def download_uploads(replace=False, cleanup=True):
     tarball afterwards if 'cleanup' is also True.
 
     """
-    run('/bin/tar -C project/{}/media -c uploads > uploads.tar'.format(
+    run('tar -C project/{}/media -c uploads > uploads.tar'.format(
         env.project))
     tarball = get('uploads.tar'.format(env.project), '%(host)s-%(path)s')[0]
     run('/bin/rm uploads.tar'.format(env.project))
     if not replace:
         return
     local('/bin/rm -rf {}/media/uploads'.format(env.project))
-    local('/bin/tar -C {0}/media -xf {1}'.format(env.project, tarball))
+    local('tar -C {0}/media -xf {1}'.format(env.project, tarball))
     if cleanup:
         local('/bin/rm {}'.format(tarball))
 

@@ -11,7 +11,7 @@ from fabric.tasks import execute
 def drop_db():
     """Delete database"""
     with settings(user=env.poweruser, warn_only=True):
-        sudo('/usr/bin/dropdb {0}'.format(env.db), user='postgres')
+        sudo('dropdb {0}'.format(env.db), user='postgres')
 
 
 @task
@@ -26,10 +26,10 @@ def create_db():
                 "psql --quiet --list --tuples-only | awk '{{print $1}}'\
                 | egrep '^{}$'".format(env.db), user='postgres').succeeded
         if not db_user_exists:
-            sudo('/usr/bin/createuser -P -S -D -R -e {}'.format(env.dbuser),
+            sudo('createuser -P -S -D -R -e {}'.format(env.dbuser),
                  user='postgres')
         if not db_exists:
-            sudo('/usr/bin/createdb --echo --encoding=UTF8 '
+            sudo('createdb --echo --encoding=UTF8 '
                  '--owner={} {}'.format(env.dbuser, env.db),
                  user='postgres')
 
@@ -41,7 +41,7 @@ def upload_db(recreate=True):
     Drop and recreate the target database if 'recreate' argument is True.
 
     """
-    local('/usr/bin/pg_dump --clean -F custom '
+    local('pg_dump --clean -F custom '
           '-U {0} {1} > {1}.backup'.format(env.dbuser, env.db))
     put('{}.backup'.format(env.db), '.')
     if recreate:
@@ -51,7 +51,7 @@ def upload_db(recreate=True):
         homedir = run('pwd', )
     with settings(user=env.poweruser):
         with cd(homedir):
-            sudo('/usr/bin/pg_restore -d {0} {0}.backup'.format(env.db),
+            sudo('pg_restore -d {0} {0}.backup'.format(env.db),
                  user='postgres')
     local('/bin/rm {}.backup'.format(env.db))
 
@@ -66,16 +66,16 @@ def download_db(restore=False, cleanup=False, recreate=True):
 
     """
     with settings(hide('stdout', 'running')):
-        run('/usr/bin/pg_dump --clean -F custom '
+        run('pg_dump --clean -F custom '
             '{0} > {0}.backup'.format(env.db))
     dump_file = get('{}.backup'.format(env.db), '%(host)s-%(path)s')[0]
     if not restore:
         return
     if recreate:
-        local('/usr/bin/dropdb -U {0} {1}'.format(env.dbuser, env.db))
-        local('/usr/bin/createdb --echo --encoding=UTF8 '
+        local('dropdb -U {0} {1}'.format(env.dbuser, env.db))
+        local('createdb --echo --encoding=UTF8 '
               '-U postgres --owner={0} {1}'.format(env.dbuser, env.db))
-    local('/usr/bin/pg_restore -U postgres -d {1} {2}'.format(
+    local('pg_restore -U postgres -d {1} {2}'.format(
           env.dbuser, env.db, dump_file))
     if cleanup:
         local('/bin/rm {}'.format(dump_file))
