@@ -1,6 +1,8 @@
 from fabric.state import env
 from .utils import get_git_remote_url
 
+__version__ = '0.4.8'
+
 env.setdefault('branch', 'master')
 env.setdefault('repo', get_git_remote_url())
 env.setdefault('type', 'production')
