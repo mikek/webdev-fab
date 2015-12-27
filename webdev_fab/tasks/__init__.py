@@ -2,12 +2,10 @@ import os
 
 from fabric.colors import yellow, red
 from fabric.context_managers import settings, hide
-from fabric.contrib import django
-from fabric.contrib.files import append, exists, cd, lcd
+from fabric.contrib.files import append, exists, cd
 from fabric.decorators import task
-from fabric.operations import local, put, run, sudo
+from fabric.operations import local, run, sudo
 from fabric.state import env
-from fabric.tasks import execute
 
 
 @task

@@ -1,4 +1,3 @@
-from fabric.colors import red
 from fabric.context_managers import settings, hide
 from fabric.contrib.files import cd
 from fabric.decorators import task

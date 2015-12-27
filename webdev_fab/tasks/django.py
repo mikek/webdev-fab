@@ -1,16 +1,15 @@
 from fabric.context_managers import settings, hide
-from fabric.contrib import django
-from fabric.contrib.files import append, exists, cd, lcd
+from fabric.contrib.files import append, exists, cd
 from fabric.decorators import task
-from fabric.operations import local, get, put, run, sudo
+from fabric.operations import get, local, put, run, sudo
 from fabric.state import env
 from fabric.tasks import execute
 
-from webdev_fab.tasks import *
+from webdev_fab.tasks import (create_user, upload_local_public_key,
+                              generate_keypair, show_public_key)
 from webdev_fab.tasks.python import (setup_virtualenv, recompile_py,
                                      install_reqs)
-from webdev_fab.tasks.postgresql import (drop_db, create_db, upload_db,
-                                         download_db)
+from webdev_fab.tasks.postgresql import (create_db, upload_db, download_db)
 from webdev_fab.utils import generate_django_secret_key
 
 __all__ = ['deploy', 'local_to_remote', 'remote_to_local', 'provision',
